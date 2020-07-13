@@ -1,5 +1,8 @@
 #!/bin/bash
 
+function json_error() {
+  printf '{"error": { message: "%s","code": "%s"}}\n' "$1" "$2"
+}
 
 echo "Content-type: application/json"
 echo ""
@@ -14,6 +17,8 @@ do
     declare var_${parm[i]}=${parm[i+1]}
 done
 
-# Run the command.
-echo "${var_a},${var_b},${var_c}" | /fortran/sum | awk '{ print $8 }'
-exit 0
+if [ -z $var_a] && [ -z $var_b] && [ -z $var_c ]; then
+    json_error "Empty operands" 1
+    exit 0
+fi
+

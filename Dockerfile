@@ -10,8 +10,7 @@ COPY conf/default.conf /etc/nginx/conf.d/default.conf
 # Copy and compile source code.
 COPY fortran /fortran
 RUN cd /fortran && \
-    gfortran -o sum sum.f && \
-    gfortran -o triangle-area triangle-area.f
+    for file in $(ls *.f); do gfortran -o "${file%.*}" $file; done
 
 COPY cgi-bin /usr/share/nginx/html/cgi-bin/
 
